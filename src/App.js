@@ -3,6 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import 'whatwg-fetch';
 import ListUsers from './ListUsers';
+import ListProject from './components/project';
+import AddProject from './components/addProject';
+
 import AddUsers from './AddUsers';
 
 class App extends Component {
@@ -11,7 +14,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      listUsers: []
+      listUsers: [],  
+      listProjects: []
     };
     
   }
@@ -30,6 +34,19 @@ class App extends Component {
 
       }).catch(function(ex) {
         console.log('parsing failed', ex)
+      });
+
+      fetch('https://kickass-sdw-3a.herokuapp.com/api/projects/')
+    .then(function(response) {
+      return response.json()
+    }).then((json) => {
+      console.log('parsed json', json)
+      this.setState({
+          listProjects: json
+        });
+
+      }).catch(function(ex) {
+        console.log('parsing failed', ex)
       })
   }
 
@@ -42,6 +59,8 @@ class App extends Component {
         </div>
         <div className="container">
           <ListUsers listUsers={this.state.listUsers} />
+          <ListProject listProjects={this.state.listProjects} />
+          
           <AddUsers listUsers={this.state.listUsers} componentDidMount={this.componentDidMount.bind(this)}/>
         </div>
       </div>
